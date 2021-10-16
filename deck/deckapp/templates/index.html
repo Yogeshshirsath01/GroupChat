@@ -1,0 +1,76 @@
+{% extends 'base.html' %}
+{% block content %}
+{% load static %}
+    <div class="container-fluid">
+        <div class="row">
+            {% if user.is_authenticated %}
+                <nav class="col-md-3 ">
+                    <div class="row" style="margin-top:10px;">
+                        <h3 style="margin-left:20px;">Groups</h3>
+                        <div id="addbutton">
+                            <button type="button" class="btn btn-light" style="margin-left:150px;display: inline-block">
+                                <i class=" material-icons">add_circle</i>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="sidebar-sticky">
+                        </br></hr>
+                        <ul class="nav flex-column ">
+                        {% for group in groups %}
+                        <div class="shadow-sm  sidebarChat">
+                            <img class="col-sm-2 rounded-circle" src="https://media.istockphoto.com/photos/mid-adult-farmer-inspects-his-land-picture-id1264517059?b=1&k=20&m=1264517059&s=170667a&w=0&h=NkisxyFTmLROW8d7FU72NQxG7CYmniIZlDjKGKz1DZQ=">
+                            <h5 >{{group.title}}</h5>
+                            <p style="margin-bottom:-1px;">{{group.description}}</p>
+                        </div>
+                        
+                        {% endfor %}
+                        </ul>
+                    </div>
+                </nav>
+            {% endif %}
+            <div class="col-md-9" style="padding: 0;">
+                <div class="container">
+                    <form action="{% url 'index' %}" method="post" class="d-none" id="addform">
+                        {% csrf_token %}
+                        <div class="text-center">
+                            <h1>Create Group</h1>
+                            <div class="form-group row">
+                                <label for="inputEmail3" class="col-sm-2 col-form-label">Title of Group</label>
+                                <div class="col-sm-8">
+                                <input type="text" class="form-control" id="title" name="title" required>
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <label for="inputEmail3" class="col-sm-2 col-form-label">Description</label>
+                                <div class="col-sm-8">
+                                <input type="text" class="form-control" id="description" name="description" required>
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <label for="inputEmail3" class="col-sm-2 col-form-label">Starting Amount</label>
+                                <div class="col-sm-8">
+                                <input type="number" class="form-control" id="amount" name="amount" required>
+                                </div>
+                            </div>
+                            
+                            <div class="form-group row">
+                                <div class="col-sm-8">
+                                <button type="submit" class="btn btn-primary">Create</button>
+                                </div>
+                            </div>
+                        </div>
+                    </form> 
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+    $( document ).ready(function() {
+        console.log( "ready!" );
+    });
+    
+    $('#addform').parent().parent().parent().removeClass('d-none');
+    </script>
+
+{% endblock %}
