@@ -1,0 +1,201 @@
+{% load static %}
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+    <script src="https://code.jquery.com/jquery-3.1.1.min.js"   integrity="sha256-hVVnYaiADRTO2PzUGmuLJr8BLUSjGIZsDYGmIJLv2b8="   crossorigin="anonymous"></script>
+    <link href="{% static 'css/styles.css' %}" rel="stylesheet">     
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/icon?family=Material+Icons"
+      />
+    <title>{% block title %}Deck{% endblock %}</title>
+    <script>
+    {% if deck %}
+
+    $(document).ready(function(){
+   
+    setInterval(function(){
+        $.ajax({
+            type: 'GET',           
+            url : "/getMessages/{{pk}}",
+            success: function(response){
+                $("#chatting").empty();
+                for (var key in response.messages)
+                {
+                   var temp="<div class='container_darker'><b>"+response.messages[key].user+"</b><h5>"+response.messages[key].value+"</h5><p>"+response.messages[key].date+"</p></div>";
+                    $("#chatting").append(temp);
+                }
+                
+            },
+            error: function(response){
+                alert('An error occured')
+            }
+        });
+    },1000);
+    })
+    {% endif %}
+    </script> 
+  </head>
+  <body >
+        {% if user.is_authenticated %}
+                <div class="row justify-content-between">
+                    <div class="col-4">
+                        <div class="sidenav">
+                            <div class="sideheader row">
+                                <div onclick="window.location.href='{% url 'index'  %}';">
+                                    <button type="button" class="btn btn-light sideheader_button1">
+                                        <i class="material-icons">home</i>
+                                    </button>
+                                </div>  
+                                
+                                <h3  class="h" >Groups</h3>
+                                <div id="addbutton">
+                                    <button type="button" class="btn btn-light sideheader_button2" style="" >
+                                        <i class=" material-icons">add_circle</i>
+                                    </button>
+                                </div><hr>  
+                            </div>                             
+                           
+                            {% for group in groups %}
+                            <div onclick="window.location.href='{% url 'group_chat' group.pk %}';" class="sidechats" >
+                            
+                                <div class="row">
+                                    {% if group.group_profile.url != None%}
+                                        <img style="border-radius: 50%; width:45px;height:43px;margin-left: 8px;" src="{{group.group_profile.url}}">
+                                    {% else %}
+                                        <img style="border-radius: 50%; width:45px;height:43px;margin-left: 8px;" src="static/img/groupofpeople.png" >
+                                    {% endif %}
+                                    <h5 style="margin-left:8px;margin-top:-5px;">{{group.title}}</h5>
+                                </div>
+                                <p style="margin-top:-20px;margin-left:45px;">{{group.description}}</p>   
+                                
+                            </div>
+                            {% endfor %}                             
+                        </div> 
+                    </div>
+                
+                    {% if not deck %}
+                    <div class="col-4 float-end  right_sidenav" >
+
+                            <h3 > Suggested Groups</h3>
+                            {% for group in suggested_groups %}
+                            <div onclick="window.location.href='{% url 'deckauth' group.pk %}';"  class="sidechats">
+                            
+                                <div  class="row">
+                                    {% if group.group_profile.url != None%}
+                                        <img style="border-radius: 50%; width:45px;height:43px;margin-left: 8px;" src="{{group.group_profile.url}}">
+                                    {% else %}
+                                        <img style="border-radius: 50%; width:45px;height:43px;margin-left: 8px;" src="static/img/groupofpeople.png" >
+                                    {% endif %}
+                                    <h5 style="margin-left:8px;margin-top:-5px;">{{group.title}}</h5>
+                                </div>
+                                
+                                <p style="margin-top:-20px;">{{group.description}}</p> 
+                                
+                                
+                            </div>
+                            {% endfor %}
+                        
+                    </div> 
+                    {% endif %}
+                </div>
+                    
+                    {% if deck %}
+                    <div class=" chats">
+                        <div class="shadow rounded navbar" > 
+                            <img src="{{deck.group_profile.url}}">
+                            <h1 id='headline' > {{deck}}  </h1> 
+                            {% if deck.group_admin == user%}
+                            <div id="edit">
+                                <button type="button" value="{{deck.id}}" id="content" class="btn btn-light">
+                                    <i class=" material-icons">edit</i>
+                                </button>
+                            </div>
+                            {% endif %}
+                        </div>
+                        <div class="chatting" id="chatting">
+                            <div class="container_darker">
+                                
+                            </div>
+                        </div>
+                        <form class="chatform" id="chatform" name="chatform">
+                            {% csrf_token %}
+                            <div class="input-group">
+                                <input type="hidden" name="username" id="user" value="{{user.id}}"/>
+                                <input type="hidden" name="deck_id" id="deck_id" value="{{deck.id}}"/>
+                                <input type="text" class="form-control" style="border-radius: 15px;" placeholder="Type here" name="message" id="message" required>
+                                <input type="submit" class="btn btn-primary" id="submitbutton" value="Send">
+                            </div>
+                        </form>
+                        
+                    <div>
+                    {% endif %}
+              {% endif %}
+              
+                    <div class="col-md-3" style="margin-left: 450px; margin-top:60px; ">                    
+                        <form action="{% url 'create' %}" method="post" class="d-none" id="addform" enctype="multipart/form-data">
+                            {% csrf_token %}
+                                <div class="text-center">
+                                <h1>Create Group</h1>
+                                    <div class="form-group row">
+                                        <label >Title of Group</label>
+                                        <input type="text" class="form-control" id="title" name="title" placeholder="Title" required>
+                                    </div>
+                                    <div class="form-group row">
+                                        <label >Description</label>
+                                        <input type="text" class="form-control" id="description" name="description" required>
+                                    </div>
+
+                                    <div class="form-group row">
+                                        <label for="password">Password</label>
+                                        <input type="password" class="form-control" id="password" name="password" placeholder="Password">
+                                    </div>
+                                    <div class="form-group row">
+                                        <label for="upload">Group Profile Picture</label>
+                                       <input type="file" name="upload" id="upload" accept="image/*" required>
+                                    </div>
+                                    
+                                    <button type="submit" class="btn btn-primary">Submit</button>
+                                </div>
+                            </div>
+                        </form> 
+                    </div>
+          </div>
+      </div>
+              
+    
+    <!-- Optional JavaScript -->
+    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+    <script src="{% static 'js/index.js' %}"></script>
+    <script>
+    $(document).on('submit','#chatform',function(e){
+        e.preventDefault();
+
+        $.ajax({
+        type:'POST',
+        url:'/send',
+        data:{
+            user:$('#user').val(),
+            deck_id:$('#deck_id').val(),
+            message:$('#message').val(),
+            csrfmiddlewaretoken:$('input[name=csrfmiddlewaretoken]').val(),
+        },
+        //success: function(data){
+        //   alert(data)
+        //}
+        });
+        document.getElementById('message').value = ''
+        
+    });
+    
+    
+    </script>
+
+    
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
+  </body>
+</html>

@@ -1,0 +1,157 @@
+
+body {
+    background-color: #ededed;
+}
+
+.chats{ 
+    overflow: auto;
+    position: fixed;
+    height: 100%;
+    width: 75%;
+    margin-left: 343px;
+    top: 0;
+    left: 0;
+    overflow-y: auto;
+    overflow-x: auto;
+    background-color: #bffab7ad;
+}
+
+.chatform{
+    position: fixed;
+    top: 0;;
+    margin-top: 590px;
+    margin-left: 110px;
+    width: 60%;
+   
+}
+
+.chatting{
+    margin-left: 100px;
+    margin-top: 10px;
+    width: 80%;
+}
+
+.container_darker{
+    background-color: #bffab7ad;
+}
+
+.container_darker h5{
+    margin-bottom: 5px;
+}
+.navbar{
+    height: 60px;
+    width: 100%;
+    align-items: center;
+    text-align: center;
+    background-color: #98c5ff;
+}
+
+.navbar h1{
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    margin-right: -50%;
+    transform: translate(-50%, -50%);
+    color: white;
+}
+
+.navbar img{
+    position: absolute;
+    border-radius: 50%; 
+    width:45px;
+    height:43px;
+    margin-left: 8px;
+
+}
+
+.navbar button{
+    margin-left:930px;
+}
+.sideheader{
+    width: 100%;
+}
+.sideheader_button1{
+    position: fixed;
+    margin-left: 2%;
+}
+
+.sideheader_button2{
+    position: fixed;
+    margin-left: 5%;
+}
+
+.h{
+    margin-left: 34%;   
+}
+
+
+.sidenav {
+    height: 100%;
+    width: 25%;
+    position: fixed;
+    z-index: 1;
+    top: 0;
+    left: 0;
+    background-color: rgb(255, 255, 255);
+    overflow-x: hidden;
+    padding-top: 20px;
+    padding: 5px;
+}
+
+.right_sidenav{
+    position:fixed;
+    margin-left: 68%;
+    height: 100%;
+    width: 35%;
+    align-items: center;
+    text-align: center;
+    z-index: 1;
+    background-color: rgb(255, 255, 255);
+    padding: 20px;
+    
+}
+
+.right_sidenav p{
+    align-items: center;
+    text-align: left;
+    margin-left: 44px;
+}
+
+
+
+.sidechats{
+    border: 0.5px solid #d7ddd4;
+    justify-content: space-between;
+    box-shadow: 2px 3px 2px #c5c5c5;
+    border-radius: 25px;
+    height:12%;
+    margin-top: 10px;
+    padding: 20px;
+    cursor: pointer;
+}
+.sidechats:hover{
+    background-color: #eefae4;
+}
+
+
+@media screen and (max-width: 800px) {
+    .sidenav{
+    width: 100%; 
+    margin-left:0%;/* The width is 100%, when the viewport is 800px or smaller */
+}
+    .right_sidenav{
+    width:100%;
+    position: relative;
+}
+  
+  .sideheader_button1{
+    margin-left:2%;
+  }
+  .sideheader_button2{
+    margin-left:35%;
+  }
+  .h{
+    margin-left:40%;
+  }
+  
+}
